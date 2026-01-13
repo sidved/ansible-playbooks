@@ -21,6 +21,10 @@
         validate_certs: "{{ validate_certs }}"
       register: result
 
+     - name: Verify collection version
+       ansible.builtin.debug:
+        msg: "Using ansible.hub version: {{ lookup('ansible.builtin.config', 'collections_paths') }}"
+
     - name: Show result
       ansible.builtin.debug:
         var: result
