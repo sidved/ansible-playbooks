@@ -1,0 +1,26 @@
+---
+- name: add group
+  hosts: localhost
+  gather_facts: false
+  connection: local
+
+  vars:
+    ah_host: "https://controller.example.com"
+    ah_username: "admin"
+    ah_password: "redhat"
+    validate_certs: false
+
+  tasks:
+    - name: Ensure the group exists
+      ansible.hub.ah_group:
+        name: "STT::group1"
+        state: present
+        ah_host: "{{ ah_host }}"
+        ah_username: "{{ ah_username }}"
+        ah_password: "{{ ah_password }}"
+        validate_certs: "{{ validate_certs }}"
+      register: result
+
+    - name: Show result
+      ansible.builtin.debug:
+        var: result
