@@ -5,6 +5,7 @@
   connection: local
 
   vars:
+    # These can be defined here or injected via AAP Credentials
     ah_host: "https://controller.example.com"
     ah_username: "admin"
     ah_password: "redhat"
@@ -18,10 +19,11 @@
         hub_groups:
           - name: "STT::group1"
             state: present
+        # These vars are passed into the role to authenticate
         ah_host: "{{ ah_host }}"
         ah_username: "{{ ah_username }}"
         ah_password: "{{ ah_password }}"
-        validate_certs: "{{ validate_certs }}"
+        ah_validate_certs: "{{ validate_certs }}"
       register: result
 
     - name: Show result
