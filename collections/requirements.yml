@@ -1,3 +1,4 @@
+---
 collections:
-  - name: ansible.platform
-    
+  - name: infra.aap_configuration
+    version: "1.4.0"
