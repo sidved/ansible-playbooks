@@ -10,7 +10,7 @@
   vars:
     controller_host: "https://controller.example.com"    # Your Controller URL
     controller_username: "admin"
-    controller_password: "YourPasswordHere"
+    controller_password: "redhat"
     validate_certs: false
 
     ah_groups:
