@@ -1,22 +1,26 @@
 ---
-- name: AAP 2.6 Configuration as Code
+- name: add group
   hosts: localhost
   gather_facts: false
   connection: local
 
   vars:
-    # Inject these via AAP Credentials or extra vars
-    ah_host: "{{ ah_host }}"
-    ah_username: "{{ ah_username }}"
-    ah_password: "{{ ah_password }}"
-    ah_validate_certs: false
-
-    # Declarative Hub configuration
-    hub_groups:
-      - name: "group1"
-        state: present
+    ah_host: "https://gateway.example.com"
+    ah_username: "admin"
+    ah_password: "redhat"
+    validate_certs: false
 
   tasks:
-    - name: Ensure Automation Hub groups exist
-      ansible.builtin.include_role:
-        name: infra.aap_configuration.hub_group
+    - name: Ensure the group exists
+      ansible.hub.ah_group:
+        name: "STT::group1"
+        state: present
+        ah_host: "{{ ah_host }}"
+        ah_username: "{{ ah_username }}"
+        ah_password: "{{ ah_password }}"
+        validate_certs: "{{ validate_certs }}"
+      register: result
+
+    - name: Show result
+      ansible.builtin.debug:
+        var: result
