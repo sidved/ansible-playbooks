@@ -1,26 +1,42 @@
 ---
-- name: add group
+- name: Create a team in Automation Controller (AAP 2.6)
   hosts: localhost
   gather_facts: false
   connection: local
 
+  collections:
+    - infra.aap_configuration
+
   vars:
-    ah_host: "https://controller.example.com"
-    ah_username: "admin"
-    ah_password: "redhat"
-    validate_certs: false
+    controller_host: "https://controller.example.com"  # Controller URL
+    controller_username: "admin"                       # Controller admin
+    controller_password: "redhat"           # Use vault in prod
+    organization_name: "Default"                      # Organization for the team
+    team_name: "group1"                         # Name of the team to create
+    team_description: "Team equivalent to group for infra admins"
 
   tasks:
-    - name: Ensure the group exists
-      ansible.hub.ah_group:
-        name: "STT::group1"
+    - name: Ensure the organization exists
+      infra.aap_configuration.organizations:
+        name: "{{ organization_name }}"
         state: present
-        ah_host: "{{ ah_host }}"
-        ah_username: "{{ ah_username }}"
-        ah_password: "{{ ah_password }}"
-        validate_certs: "{{ validate_certs }}"
-      register: result
+        controller_host: "{{ controller_host }}"
+        controller_username: "{{ controller_username }}"
+        controller_password: "{{ controller_password }}"
+        validate_certs: false
 
-    - name: Show result
+    - name: Ensure the team exists
+      infra.aap_configuration.teams:
+        name: "{{ team_name }}"
+        organization: "{{ organization_name }}"
+        description: "{{ team_description }}"
+        state: present
+        controller_host: "{{ controller_host }}"
+        controller_username: "{{ controller_username }}"
+        controller_password: "{{ controller_password }}"
+        validate_certs: false
+      register: team_result
+
+    - name: Show team creation result
       ansible.builtin.debug:
-        var: result
+        var: team_result
