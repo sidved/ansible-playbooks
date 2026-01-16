@@ -1,23 +1,30 @@
 ---
-- name: add group
+- name: Create Automation Hub groups via Configuration as Code
   hosts: localhost
   gather_facts: false
   connection: local
 
+  collections:
+    - infra.aap_configuration
+
   vars:
-    ah_host: "https://gateway.example.com"
-    ah_username: "admin"
-    ah_password: "redhat"
+    controller_host: "https://controller.example.com"    # Your Controller URL
+    controller_username: "admin"
+    controller_password: "YourPasswordHere"
     validate_certs: false
 
-  tasks:
-    - name: Ensure the group exists
-      ansible.platform.ah_group:
-        name: "STT::group1"
+    ah_groups:
+      - name: "STT::group1"
+        description: "Test group for AAP 2.6"
         state: present
-        ah_host: "{{ ah_host }}"
-        ah_username: "{{ ah_username }}"
-        ah_password: "{{ ah_password }}"
+
+  tasks:
+    - name: Create Hub groups
+      infra.aap_configuration.hub_group:
+        ah_groups: "{{ ah_groups }}"
+        controller_host: "{{ controller_host }}"
+        controller_username: "{{ controller_username }}"
+        controller_password: "{{ controller_password }}"
         validate_certs: "{{ validate_certs }}"
       register: result
 
