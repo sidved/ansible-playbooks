@@ -1,46 +1,27 @@
 ---
-- name: Create a team in Automation Controller (AAP 2.6)
+- name: Create Hub group using ansible.platform
   hosts: localhost
   gather_facts: false
   connection: local
 
-  collections:
-    - infra.aap_configuration
-
   vars:
-    controller_host: "https://controller.example.com"  # Controller URL
-    controller_username: "admin"                       # Controller admin
-    controller_password: "redhat"           # Use vault in prod
-    organization_name: "Default"                      # Organization for the team
-    team_name: "group1"                         # Name of the team to create
-    team_description: "Team equivalent to group for infra admins"
+    ah_host: "https://controller.example.com"
+    ah_username: "admin"
+    ah_password: "redhat"
+    validate_certs: false
 
   tasks:
-   - name: Debug - Starting team creation
-      ansible.builtin.debug:
-        msg: "Starting team creation process"
-   
-    - name: Ensure the organization exists
-      infra.aap_configuration.organizations:
-        name: "{{ organization_name }}"
+    - name: Ensure the Hub group exists
+      ansible.platform.ah_group:
+        name: "STT::group1"
         state: present
-        controller_host: "{{ controller_host }}"
-        controller_username: "{{ controller_username }}"
-        controller_password: "{{ controller_password }}"
-        validate_certs: false
+        ah_host: "{{ ah_host }}"
+        ah_username: "{{ ah_username }}"
+        ah_password: "{{ ah_password }}"
+        validate_certs: "{{ validate_certs }}"
+      register: result
 
-    - name: Ensure the team exists
-      infra.aap_configuration.teams:
-        name: "{{ team_name }}"
-        organization: "{{ organization_name }}"
-        description: "{{ team_description }}"
-        state: present
-        controller_host: "{{ controller_host }}"
-        controller_username: "{{ controller_username }}"
-        controller_password: "{{ controller_password }}"
-        validate_certs: false
-      register: team_result
-
-    - name: Show team creation result
+    - name: Show result
       ansible.builtin.debug:
-        var: team_result
+        var: result
+
