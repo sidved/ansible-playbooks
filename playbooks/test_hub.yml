@@ -16,6 +16,10 @@
     team_description: "Team equivalent to group for infra admins"
 
   tasks:
+   - name: Debug - Starting team creation
+      ansible.builtin.debug:
+        msg: "Starting team creation process"
+   
     - name: Ensure the organization exists
       infra.aap_configuration.organizations:
         name: "{{ organization_name }}"
