@@ -1,4 +1,5 @@
-- name: Create Automation Hub groups via infra.aap_configuration role
+---
+- name: Create Hub Groups via CaC in AAP 2.6
   hosts: localhost
   gather_facts: false
   connection: local
@@ -14,10 +15,7 @@
 
     ah_groups:
       - name: "STT::group1"
-        description: "Test group for AAP 2.6"
-        state: present
-      - name: "STT::group2"
-        description: "Another test group"
+        description: "Test group for Automation Hub"
         state: present
 
   roles:
@@ -29,3 +27,7 @@
         controller_password: "{{ controller_password }}"
         validate_certs: "{{ validate_certs }}"
 
+  tasks:
+    - name: Show Hub groups after role execution
+      ansible.builtin.debug:
+        var: ah_groups
