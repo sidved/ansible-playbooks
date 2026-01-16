@@ -1,17 +1,17 @@
 ---
-- name: Create Hub group using ansible.platform
+- name: add group
   hosts: localhost
   gather_facts: false
   connection: local
 
   vars:
-    ah_host: "https://controller.example.com"
+    ah_host: "https://gateway.example.com"
     ah_username: "admin"
     ah_password: "redhat"
     validate_certs: false
 
   tasks:
-    - name: Ensure the Hub group exists
+    - name: Ensure the group exists
       ansible.platform.ah_group:
         name: "STT::group1"
         state: present
@@ -24,4 +24,3 @@
     - name: Show result
       ansible.builtin.debug:
         var: result
-
