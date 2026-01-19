@@ -1,33 +1,20 @@
----
-- name: Create Hub Groups via CaC in AAP 2.6
+- name: Create Platform Teams for Automation Hub
   hosts: localhost
-  gather_facts: false
   connection: local
-
-  collections:
-    - infra.aap_configuration
-
+  gather_facts: false
   vars:
-    controller_host: "https://controller.example.com"
-    controller_username: "admin"
-    controller_password: "redhat"
-    validate_certs: false
+    # Use unified credentials
+    aap_hostname: "https://controller.example.com"
+    aap_username: "admin"
+    aap_password: "redhat"
+    aap_validate_certs: false
 
-    ah_groups:
-      - name: "STT::group1"
-        description: "Test group for Automation Hub"
-        state: present
+    # The list of teams
+    aap_teams:
+      - name: "team1"
+        organization: "Default"
+        description: "Unified team for Hub and Controller"
 
   roles:
-    - role: infra.aap_configuration.hub_group
-      vars:
-        ah_groups: "{{ ah_groups }}"
-        controller_host: "{{ controller_host }}"
-        controller_username: "{{ controller_username }}"
-        controller_password: "{{ controller_password }}"
-        validate_certs: "{{ validate_certs }}"
-
-  tasks:
-    - name: Show Hub groups after role execution
-      ansible.builtin.debug:
-        var: ah_groups
+    # Use gateway_teams instead of hub_group
+    - role: infra.aap_configuration.gateway_teams
