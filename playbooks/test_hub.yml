@@ -1,20 +1,51 @@
-- name: Create Platform Teams for Automation Hub
+---
+- name: Create Automation Hub groups via infra.aap_configuration role
   hosts: localhost
-  connection: local
   gather_facts: false
+  connection: local
+
+  collections:
+    - infra.aap_configuration
+
   vars:
-    # Use unified credentials
+    # --- Connection Info ---
+    # In AAP 2.6, point this to your Gateway/Hub URL
     aap_hostname: "https://controller.example.com"
     aap_username: "admin"
     aap_password: "redhat"
     aap_validate_certs: false
 
-    # The list of teams
-    aap_teams:
-      - name: "team1"
-        organization: "Default"
-        description: "Unified team for Hub and Controller"
+    # --- Debugging Settings ---
+    # This is crucial! It disables 'no_log' so you can see why a task fails
+    hub_configuration_group_secure_logging: false
+    aap_configuration_secure_logging: false
 
-  roles:
-    # Use gateway_teams instead of hub_group
-    - role: infra.aap_configuration.gateway_teams
+    # --- Data ---
+    # The role expects 'aap_teams', but we can keep your 'ah_groups' 
+    # and map it during the role call.
+    ah_groups:
+      - name: "STT::group1"
+        description: "Test group for AAP 2.6"
+        state: present
+
+  tasks:
+    - name: Pre-flight Debug - Check if variables are loaded
+      ansible.builtin.debug:
+        msg: "Attempting to create {{ ah_groups | length }} groups on {{ aap_hostname }}"
+
+    - name: Run Hub Group Role
+      ansible.builtin.include_role:
+        name: infra.aap_configuration.hub_group
+      vars:
+        # MAP: The role looks for 'aap_teams', so we pass it here
+        aap_teams: "{{ ah_groups }}"
+        
+        # MAP: The role looks for 'ah_' or 'aap_' prefixes
+        ah_host: "{{ aap_hostname }}"
+        ah_username: "{{ aap_username }}"
+        ah_password: "{{ aap_password }}"
+        ah_validate_certs: "{{ aap_validate_certs }}"
+
+    - name: Final Status
+      ansible.builtin.debug:
+        msg: "Playbook execution completed. If groups weren't created, check the output above."
