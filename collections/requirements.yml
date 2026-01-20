@@ -1,5 +1,5 @@
 ---
 collections:
   - name: ansible.hub.ah_group
-    version: 1.0.3
+    version: 1.0.1
   
