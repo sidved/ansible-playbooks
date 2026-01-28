@@ -1,32 +1,26 @@
 ---
-- name: add group
+- name: Configure AAP 2.6 via Platform Gateway
   hosts: localhost
-  gather_facts: false
   connection: local
+  gather_facts: false
 
   vars:
-    ah_host: "https://controller.example.com"
-    ah_username: "admin"
-    ah_password: "redhat"
-    validate_certs: false
+    aap_hostname: "https://controller.example.com"
+    aap_username: "admin"
+    aap_password: "redhat"
 
   tasks:
-   - name: Assign role
-     ansible.hub.group_roles:
-       ah_host: "{{ ah_host }}"
-       ah_username: "{{ ah_username }}"
-       ah_password: "{{ ah_password }}"
-       validate_certs: "{{ validate_certs }}
-       groups:
-         - mygroup
-           role_list:
-             - roles:
-                - galaxy.collection_publisher 
-                  targets:
-                    collection_namespaces:
-                      - my_namespace
-     register: result
-
-   - name: Show result
-     ansible.builtin.debug:
-       var: result
+    - name: Ensure the group exists
+      ansible.hub.group_roles:
+        groups:
+          - mygroup
+        role_list:
+          - roles:
+             - galaxy.collection_publisher
+               #targets:
+              #collection_namespaces:
+                # - my-namespace
+       state: present
+       ah_host: "https://controller.example.com"
+       ah_username: "admin"
+       ah_password: "redhat"
