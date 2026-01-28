@@ -18,9 +18,9 @@
        ah_password: "{{ ah_password }}"
        validate_certs: "{{ validate_certs }}
        groups:
-        - mygroup
-          role_list:
-            - roles:
+         - mygroup
+           role_list:
+             - roles:
                 - galaxy.collection_publisher 
                   targets:
                     collection_namespaces:
