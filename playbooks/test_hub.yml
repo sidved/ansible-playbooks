@@ -25,7 +25,7 @@
                   targets:
                     collection_namespaces:
                       - my_namespace
-      register: result
+     register: result
 
    - name: Show result
      ansible.builtin.debug:
