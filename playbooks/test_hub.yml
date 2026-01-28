@@ -11,15 +11,16 @@
     validate_certs: false
 
   tasks:
-    - name: Ensure the group exists
-      ansible.hub.ah_group:
-        name: "org1::team1"
-        state: present
-        ah_host: "{{ ah_host }}"
-        ah_username: "{{ ah_username }}"
-        ah_password: "{{ ah_password }}"
-        validate_certs: "{{ validate_certs }}"
-      register: result
+   - name: Assign role
+     ansible.hub.group_roles:
+       groups:
+        - mygroup
+          role_list:
+            - roles:
+                - galaxy.collection_publisher 
+                  targets:
+                    collection_namespaces:
+                      - my_namespace
 
     - name: Show result
       ansible.builtin.debug:
