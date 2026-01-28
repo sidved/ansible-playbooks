@@ -13,6 +13,10 @@
   tasks:
    - name: Assign role
      ansible.hub.group_roles:
+       ah_host: "{{ ah_host }}"
+       ah_username: "{{ ah_username }}"
+       ah_password: "{{ ah_password }}"
+       validate_certs: "{{ validate_certs }}
        groups:
         - mygroup
           role_list:
