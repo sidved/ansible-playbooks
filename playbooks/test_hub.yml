@@ -20,7 +20,7 @@
                #targets:
               #collection_namespaces:
                 # - my-namespace
-       state: present
-       ah_host: "https://controller.example.com"
-       ah_username: "admin"
-       ah_password: "redhat"
+        state: present
+        ah_host: "https://controller.example.com"
+        ah_username: "admin"
+        ah_password: "redhat"
