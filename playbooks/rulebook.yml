@@ -1,0 +1,20 @@
+- name: Reproduce EDA Variable Bug
+  hosts: localhost
+  connection: local
+  tasks:
+    - name: Attempt to update variables using extra_vars
+      ansible.eda.rulebook_activation:
+        name: "test-activation"
+        project_name: "test1"
+        rulebook_name: "hello_world.yml" # Must match what you picked in UI
+        organization_name: "test1"
+        decision_environment: "DE-Repro"
+        state: enabled
+        # REPRODUCE HERE: This dictionary often fails to trigger an update
+        extra_vars:
+          my_var: "Version 2 - Updated"
+      register: result
+
+    - name: Check Result
+      debug:
+        msg: "Did Ansible detect a change? {{ result.changed }}
