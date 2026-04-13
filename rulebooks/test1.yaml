@@ -1,0 +1,10 @@
+
+- name: Repro the extra_vars bug
+  ansible.eda.rulebook_activation:
+    name: "test-activation"
+    project_name: "eda_test"
+    rulebook_name: "rulebooks/test_rulebook.yml"
+    organization_name: "Default"
+    state: enabled
+    extra_vars:
+      my_var: "New_Value"
